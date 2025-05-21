@@ -1,0 +1,235 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>故事页面测试</title>
+        <style>
+            .app-mobile-only {
+                align-items: center;
+                display: flex;
+                flex-direction: column-reverse;
+                height:auto;
+                width: 100%;
+                padding: 50px 0 50px 0;
+            }
+
+            .kanae-story {
+                height: 170px;
+                width: 220px;
+                position: relative;
+                justify-content: center;
+                align-items: center;
+                font-family: "geosans-light";
+                padding-left: 10px;
+                z-index: 4;
+                overflow: visible;
+            }
+            .kanae-story img {
+                z-index: 1;
+            }
+
+            .kanae-story-connection {
+                height: 100px;
+                width: 5px;
+                justify-content: center;
+                align-items: center;
+                z-index: 5;
+            }
+            .kanae-story-connection canvas {
+                position: relative;
+                transform: translate(96%,25%);
+            }
+
+            .kanae-story-span {
+                font-size: 50px;
+                color: #ffffff;
+                font-family: "geosans-light";
+                font-weight: bold;
+                z-index: 3;
+                position: absolute;
+                top: 65%;
+                left: 50%;
+                transform: translate(-44%, -53%);
+                text-align: center;
+                user-select: none;
+                -webkit-user-select: none; 
+                -moz-user-select: none; 
+            }
+
+
+            .kanae-story-spanshadow{
+                font-size: 50px;
+                color: #00000080;
+                font-family: "geosans-light";
+                font-weight: bold;
+                z-index: 2;
+                position: absolute; 
+                top: 65%; 
+                left: 50%; 
+                transform: translate(-39%, -47%); 
+                text-align: center;
+                user-select: none;
+                -webkit-user-select: none;
+                -moz-user-select: none; 
+
+            }
+
+            @font-face {
+                font-family: "geosans-light";
+                src: url(fonts_for_html/GeosansLight.ttf);
+            }
+
+            .story-locked {
+                position: absolute;
+                top: 64%;
+                left: 50%;
+                transform: translate(-47.5%, -50%);
+            }
+
+            .story-anomaly {
+                height: 100px;
+                width: 100px;
+                z-index: 5;
+                transform: translate(-42%, -78.5%);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="app" style="display: none;"></div>
+        <div class="app-mobile-only" id="app-mobile-only">
+            <div class="kanae-story" alt="头像">
+                <img src="img_for_html/cell_kanae.png" onclick="alert('芝士群愿。')" alt="群愿头像"></img>
+            </div>
+            <div class="kanae-story-connection">
+                <canvas class="story-connection" id="c1" width="5" height="100"></canvas>
+            </div>
+            <div class="kanae-story" id="story_f1">
+                <img src="img_for_html/cell_kanaeFanmadeStory.png" alt="章节1按钮"></img>
+                <span class="kanae-story-span">FM-1</span>
+                <span class="kanae-story-spanshadow">FM-1</span>
+            </div>
+            <div class="kanae-story-connection">
+                <canvas class="story-connection" id="c2" width="5" height="100"></canvas>
+            </div>
+            <div class="kanae-story" id="story_f2">
+                <img src="img_for_html/cell_kanaeFanmadeStory.png" alt="章节2按钮"></img>
+                <span class="kanae-story-span" style="display: none;">FM-2</span>
+                <span class="kanae-story-spanshadow" style="display: none;">FM-2</span>
+                <img src="img_for_html/story_lock.png" class="story-locked">
+            </div>
+            <div class="kanae-story-connection">
+                <canvas class="story-connection" id="c3" width="5" height="100"></canvas>
+            </div>
+            <div class="kanae-story" id="story_f3">
+                <img src="img_for_html/cell_kanaeFanmadeStory.png" alt="章节3按钮"></img>
+                <span class="kanae-story-span" style="display: none;">FM-3</span>
+                <span class="kanae-story-spanshadow" style="display: none;">FM-3</span>
+                <img src="img_for_html/story_lock.png" class="story-locked">
+            </div>
+            <div class="kanae-story-connection">
+                <canvas class="story-connection" id="c4" width="5" height="100"></canvas>
+                <img src="img_for_html/story-anomaly.png" class="story-anomaly"></img>
+            </div>
+            <div class="kanae-story" id="story_f4">
+                <img src="img_for_html/cell_kanaeFanmadeStory.png" alt="章节4按钮"></img>
+                <span class="kanae-story-span" style="display: none;">FM-4</span>
+                <span class="kanae-story-spanshadow" style="display: none;">FM-4</span>
+                <img src="img_for_html/story_lock.png" class="story-locked"></img>
+            </div>
+            <div class="kanae-story-connection">
+                <canvas class="story-connection" id="c5" width="5" height="100"></canvas>
+            </div>
+            <div class="kanae-story" id="story_f5">
+                <img src="img_for_html/cell_kanaeFanmadeStory.png" alt="章节5按钮"></img>
+                <span class="kanae-story-span" style="display: none;">FM-5</span>
+                <span class="kanae-story-spanshadow" style="display: none;">FM-5</span>
+                <img src="img_for_html/story_lock.png" class="story-locked">
+            </div>
+            <div class="kanae-story-connection">
+                <canvas class="story-connection" id="c6" width="5" height="100"></canvas>
+            </div>
+            <div class="kanae-story" id="story_f6">
+                <img src="img_for_html/cell_kanaeFanmadeStory.png" alt="章节6按钮"></img>
+                <span class="kanae-story-span" style="display: none;">FM-6</span>
+                <span class="kanae-story-spanshadow" style="display: none;">FM-6</span>
+                <img src="img_for_html/story_lock.png" class="story-locked">
+            </div>
+        </div>
+        <script>
+            const appMobileOnly = document.getElementById('app-mobile-only');
+            let isDragging = false;
+            let startY = 0;
+            let currentY = 0;
+
+            appMobileOnly.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startY = e.clientY;
+            });
+
+            appMobileOnly.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    const deltaY = e.clientY - startY;
+                    currentY += deltaY;
+                    appMobileOnly.style.transform = `translateY(${currentY}px)`;
+                    startY = e.clientY;
+                }
+            });
+
+            appMobileOnly.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+
+            appMobileOnly.addEventListener('mouseleave', () => {
+                isDragging = false;
+            });
+
+            function createConnection(num){
+                const ConnectionNum = document.getElementById(`c${num}`);
+                const sx = ConnectionNum.getContext('2d');
+                sx.beginPath();
+                sx.moveTo(2.5, 0);
+                sx.lineTo(2.5, 100);
+                sx.lineWidth = 5;
+                sx.strokeStyle = "#ffffff";
+                sx.stroke();
+            }
+            function createConnectionAlt(num){
+                const ConnectionNum = document.getElementById(`c${num}`);
+                const sxa = ConnectionNum.getContext('2d');
+                sxa.beginPath();
+                sxa.moveTo(2.5, 0);
+                sxa.lineTo(2.5, 20);
+                sxa.moveTo(2.5, 80);
+                sxa.lineTo(2.5, 100);
+                sxa.lineWidth = 5;
+                sxa.strokeStyle = "#ffffff";
+                sxa.stroke();
+            }
+
+            /*
+            function createConnectionAlt(num){
+                const ConnectionNum = document.getElementById(`c${num}`);
+                const sxa = ConnectionNum.getContext('2d');
+                const pitch = document.getElementById('pitch');
+                sxa.beginPath();
+                sxa.moveTo(25, 0);
+                sxa.lineTo(25, 100);
+                sxa.lineWidth = 5;
+                sxa.strokeStyle = "#ffffff";
+                sxa.stroke();
+                sxa.moveTo(20, 60);
+                sxa.drawImage(pitch, 20, 60, 30, 40);
+            }
+            */
+
+            for (var num=1; num<=6 ; num++)
+            {
+                if (num == 4){
+                    createConnectionAlt(num);
+                } else {
+                    createConnection(num);
+                }
+            }
+
+        </script>
+    </body>
+</html>
