@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"></meta>
+        <title>“红蓝蛇蜕时”二创活动</title>
+        <link rel="stylesheet" href="css/header.css"></link>
+        <link rel="stylesheet" href="css/main.css"></link>
+        <link rel="stylesheet" href="css/footer.css"></link>
+        <link rel="stylesheet" href="css/context_switch.css"></link>
+        <link rel="stylesheet" href="css/rules.css"></link>
+        <script src="java/insight_respoinsive.js"></script>
+        <script src="java/menu.js"></script>
+        <script src="java/content_switch.js"></script>
+    </head>
+    <body>        
+        <header>
+            <div class="header-container c-regular" id="header-container">
+                <div class="left-header">
+                    <div class="logo">
+                        <img src="img_all/channel_logo_b_ano.png">
+                    </div>
+                    <div class="left-header-border">
+                        <canvas id="left-border" height="150" width="150"></canvas>
+                        <script src="java/header_border_canvas_funcl.js"></script>"
+                    </div>
+                </div>
+                <div class="right-header">
+                    <div class="right-header-border">
+                        <canvas id="right-border" height="150" width="150"></canvas>
+                        <script src="java/header_border_canvas_funcr.js"></script>
+                    </div>
+                    <div class="story-button-container" onclick="switchContent('story')"> 
+                        <img src="img_all/story_availble.png" alt=""></img>
+                    </div>
+                    <div class="menu-container">
+                        <div class="menu-content">
+                            <!-- 菜单内容将在此动态加载或静态编写 -->
+                            <div class="menu-zhanwei-question" onclick="alert('故事仍未开始……')"></div>
+                            <div class="menu-selection" onclick="switchContent('main')">
+                                <p>主页</p>
+                            </div>
+                            <div class="menu-selection" onclick="switchContent('rules')">
+                                <p>活动规则</p>
+                            </div>
+                            <div class="menu-selection" onclick="switchContent('links')">
+                                <p>参与入口</p>
+                            </div>
+                            <div class="menu-selection" onclick="switchContent('thanks')">
+                                <p>鸣谢</p>
+                            </div>
+
+                            <div class="menu-border">
+                                <img src="img_all/menu_border.png" alt="">
+                            </div>                        
+                        </div>
+                    </div>
+                    </div>
+                    <div class="zhanwei"></div>
+                    <div class="menu-button-container">
+                        <img src="img_all/menu_static.png" class="menu-gif" id="menuGif">
+                        <script src="java/menu_button.js"></script>
+                    </div>
+                </div>
+            </div>
+            </header>
+        </header>
+    <div class="all">
+        <div id="main" class="content-switch main active">
+             <div class="hero-image" style="display: flex; align-items: stretch">
+                <div class="zhanwei-heroImage"></div>
+                <div class="insight">
+                    <img src="img_all/insight.png"> 
+                </div>
+            </div>
+            <div class="introdution">
+                <div class="introdution-title">
+                    <p class="title">活动介绍</p>
+                    <div class="text-border-a">
+                        <img src="img_all/lingxing.png" id="img-border">
+                        <canvas id="text-border-t" alt="text-border-top" height="20" width="600"></canvas>
+                        <!-- <script src="java/text-border.js"></script> -->
+                    </div>
+                    <div class="introdution-content">
+                        <p class="introdution-content">
+                            5月，是一个已经踏过蛇年春节良久的时间。<br>
+                            但对于频道而言，变化才刚刚开始...<br>
+                            <span class="hidden-span"></span><br class="hidden-span">
+                            你，是愿意见证蜕变...<br>
+                            还是想抓住机会，留下属于自己的一抹色彩...？<br>
+                        </p>
+                        <canvas id="text-border-minimize" height="20" width="200"></canvas>
+                        <script src="java/text-border-minimize.js"></script>
+                    </div>
+                    <div class="rules-simplified">
+                        <p class="rules-simplified">
+                            通过在频道的“红蓝蛇蜕时”板块投稿原创的 banner作品 或 头像作品，<br>
+                            可以获得 记忆源点（可折现！） 和 实物周边 的奖励！<br>
+                            <span class="hidden-span" onclick="alert('那位浴袍少女暂未碰见这个世界的新神明……')">单人最高奖项最高可得¤§сйφÆ！</span><br class="hidden-span">
+                            总奖池高达 4000+ 元 ！*<br class="hidden-span"><br>
+                            详情请点击此处 <span style="color: #73b6b6;" onclick="switchContent('rules')">详细规则</span>  查看。
+                        </p>
+                        <canvas id="text-border-b" alt="text-border-bottom" height="20" width="600"></canvas>
+                        <script src="java/text-border.js"></script>
+                    </div>
+                </div>                    
+            </div>
+        </div>
+        <div id="rules" class="content-switch rules">
+            <iframe src="html/rules.html" frameborder="0"></iframe>
+        </div>
+        <div id="links" class="content-switch links"></div>
+        <div id="thanks" class="content-switch thanks"></div>
+        <div id="story" class="content-switch story">
+            <iframe src="html/story.html" frameborder="0"></iframe>
+        </div>
+    </div>
+        <footer>
+            <div class="ArcChannel-logo">
+                <img src="img_all/channel_logo_w_ano.png">
+            </div>
+            <div class="ArcChannel-copyright">
+                <p>© 2025 ArcaeaChannel</p>
+            </div>
+            <div class="qrcode">
+                <div class="qrcode-group">
+                    <img src="img_all/qrcode_group.png" onclick="window.open('https://qm.qq.com/q/JSs7wD6FWi', '_blank')"></img>
+                    <p>扫码或点击加入二创群</p>
+                </div>
+                <div class="qrcode-channel">
+                    <img src="img_all/qrcode_channel.png" onclick="window.open('https://pd.qq.com/s/gr7u5go86', '_blank')"></img>
+                    <p>扫码或点击加入频道</p>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>
