@@ -1,0 +1,49 @@
+.all {
+    height: auto;
+}
+
+.content-switch {
+    display:none;
+    box-sizing: border-box;
+}
+
+.content-switch.active {
+    display: block;
+}
+.c-regular {
+    background-color: transparent;
+}
+.c-changed { 
+    background-color: #fffef4;
+}
+
+
+/* 以下是非main样式 */
+
+.rules{
+    height: 1700px;
+    width: auto;
+    /*background: linear-gradient(to bottom, transparent 0%, rgba(255, 254, 244, 0.75) 200px), rgba(255, 254, 244, 0.75) */
+    background-color: transparent;
+}
+
+.links{
+    height: 3000px;
+    width: auto;
+    /*background: linear-gradient(to bottom, transparent 0%, rgba(255, 254, 244, 0.75) 200px), rgba(255, 254, 244, 0.75) */
+    background-color: transparent;
+}
+
+.thanks{
+    height: 1500px;
+    width: auto;
+    /*background: linear-gradient(to bottom, transparent 0%, rgba(255, 254, 244, 0.75) 200px), rgba(255, 254, 244, 0.75) */
+    background-color: transparent;
+}
+
+.story {
+    width: 100%;
+    height: calc(100vh - 150px);
+    align-items: center;
+    flex-direction: column-reverse;
+}
