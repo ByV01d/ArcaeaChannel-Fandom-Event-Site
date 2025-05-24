@@ -22,6 +22,9 @@ function switchContent(type) {
   
   // 显示目标卡片
   const target = document.getElementById(`${type}`);
+  if (target == "image"){
+    target = "main"
+  }
   const bg = document.getElementById('header-container');
   if (target) {
     target.classList.add('active');
@@ -44,10 +47,6 @@ function switchContent(type) {
 
 // 初始化加载
 window.addEventListener('DOMContentLoaded', () => {
-  const savedType = localStorage.getItem('activeContent') || 'image';
-  if (savedType === null){
-    switchContent('main');
-  }else{
-    switchContent(savedType);
-  }
+  const savedType = localStorage.getItem('activeContent') || 'main';
+  switchContent(savedType);
 });
