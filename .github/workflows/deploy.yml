@@ -10,6 +10,9 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
 
+      - name: 查看工作区文件
+        run: ls -al ${{ github.workspace }}
+
       - name: 检查并打包源目录
         run: |
           SOURCE_DIR="${{ github.workspace }}"  # 替换为实际目录
