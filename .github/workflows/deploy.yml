@@ -24,13 +24,16 @@ jobs:
         run: |
           cd ${{github.workspace}}
           npm install
-          npm run build
+          npm run build || { echo "构建失败喵"; exit 1}
 
       - name: 检查并创建 dist 目录（如有必要）
         run: |
           if [ ! -d "${{github.workspace}}/dist" ]; then
-            echo "dist 目录不存在，创建空目录"
+            echo "dist 目录不存在，尝试创建空目录"
             mkdir -p ${{github.workspace}}/dist
+            if [ ! -d "${{github.workspace}}/dist" ]; then
+              echo "dist 目录创建失败"
+              exit 1
           fi
           echo "dist 目录内容如下："
           ls -la ${{github.workspace}}/dist
