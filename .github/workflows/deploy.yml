@@ -21,10 +21,12 @@ jobs:
           find ${{github.workspace}}
           if [ ! -d ${{github.workspace}}]; then
             echo "你这服务器怎么连项目目录都没有，我给你造一个"
-            mkdir -p ${{github.workspace}}
-            if [ ! -d ${{github.workspace}}]; then
+            mkdir -p /home/runner/work/ArcaeaChannel-Fandom-Event-Site/ArcaeaChannel-Fandom-Event-Site
+
+            if [ ! -d /home/runner/work/ArcaeaChannel-Fandom-Event-Site/ArcaeaChannel-Fandom-Event-Site ]; then
               echo "创建不了啊，我尽力了"
               exit 1
+          fi
 
 
       - name: 构建静态站点
