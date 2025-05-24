@@ -29,18 +29,21 @@ jobs:
           npm run build
           # 构建后的文件默认在 dist/ 目录
 
-      - name: Deploy via SSH
+      - name: Deploy dist to Aliyun via SCP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "dist/*"
+          target: "/var/www/lacrymira-site/"
+      
+      - name: Set Permissions and Restart Nginx
         uses: appleboy/ssh-action@v1
         with:
-          host: ${{ secrets.SERVER_IP }}    # 服务器 IP（需添加到 GitHub Secrets）
-          username: ${{ secrets.SERVER_USER }}  # 服务器用户名（如 root 或 ubuntu）
-          key: ${{ secrets.SERVER_SSH_KEY }}    # 已配置的私钥
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            cd /var/www/lacrymira-site
-            git pull origin main  # 若直接拉取仓库
-            # 若需覆盖文件（如构建后的 dist/ 内容）：
-            rm -rf /var/www/lacrymira-site/*
-            cp -r $HOME/actions-runner/_work/your-repo/your-repo/dist/* /var/www/lacrymira-site/
-            # 设置权限（根据 Web 服务器用户调整）
             sudo chown -R www-data:www-data /var/www/lacrymira-site
             sudo systemctl restart nginx
