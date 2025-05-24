@@ -12,16 +12,16 @@ jobs:
 
       - name: 检查并打包源目录
         run: |
-          SOURCE_DIR="${{github.workspace}}"  # 替换为实际目录
-          if [ ! -d "$SOURCE_DIR" ] || [ -z "$(ls -A $SOURCE_DIR)" ]; then
-            echo "源目录不存在或为空: $SOURCE_DIR"
+          SOURCE_DIR="${{ github.workspace }}"  # 替换为实际目录
+          if [ -z "$(ls -A $SOURCE_DIR)" ]; then
+            echo "源目录打包失败: $SOURCE_DIR"
             exit 1
           fi
           tar -czf /tmp/archive.tar.gz -C "$SOURCE_DIR" .
 
       - name: 确保 dist 目录存在
         run: |
-          DIST_DIR="${{github.workspace}}/dist"
+          DIST_DIR="${{ github.workspace }}/dist"
           mkdir -p "$DIST_DIR"
           if [ ! -d "$DIST_DIR" ]; then
             echo "dist 目录创建失败: $DIST_DIR"
