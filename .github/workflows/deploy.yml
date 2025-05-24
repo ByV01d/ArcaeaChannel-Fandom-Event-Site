@@ -23,6 +23,7 @@ jobs:
             exit 1
           fi
           tar -czf /tmp/archive.tar.gz -C "$SOURCE_DIR" .
+          tar -tvf /tmp/archive.tar.gz
 
       - name: 确保 dist 目录存在
         run: |
