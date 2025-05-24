@@ -2,6 +2,6 @@
     "name": "arcaeachannel-fandom-event-site-build",
     "version": "1.0.0",
     "scripts": {
-      "build": "arcaeachannel-fandom-event-site-build-command"
+      "build": ""
     }
   }
