@@ -1,7 +1,7 @@
 name: 部署到阿里云
 on:
   push:
-    branches: [main]  # 监听 main 分支的推送
+    branches: [main]
 
 jobs:
   deploy:
@@ -9,13 +9,15 @@ jobs:
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: 查看工作区文件
         run: ls -al ${{ github.workspace }}
 
       - name: 检查并打包源目录
         run: |
-          SOURCE_DIR="${{ github.workspace }}"  # 替换为实际目录
+          SOURCE_DIR="${{ github.workspace }}"
           if [ -z "$(ls -A $SOURCE_DIR)" ]; then
             echo "源目录打包失败: $SOURCE_DIR"
             exit 1
@@ -26,6 +28,7 @@ jobs:
         run: |
           DIST_DIR="${{ github.workspace }}/dist"
           mkdir -p "$DIST_DIR"
+          ls -ld "$DIST_DIR"
           if [ ! -d "$DIST_DIR" ]; then
             echo "dist 目录创建失败: $DIST_DIR"
             exit 1
@@ -36,24 +39,25 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          echo "目标服务器：${{ secrets.SERVER_HOST }}"
-          ssh-keyscan -H  ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
 
       - name: 部署到阿里云
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.SERVER_IP }}
+          host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "dist/*"
           target: "/var/www/lacrymira-site/"
 
       - name: 设置权限并重启 Nginx
         uses: appleboy/ssh-action@v1
         with:
-          host: ${{ secrets.SERVER_IP }}
+          host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             sudo chown -R nginx:nginx /var/www/lacrymira-site
             sudo systemctl restart nginx
