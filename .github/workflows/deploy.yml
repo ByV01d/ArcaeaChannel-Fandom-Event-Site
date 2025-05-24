@@ -19,7 +19,7 @@ jobs:
         run: |
           echo "列出所有文件:"
           find ${{github.workspace}}
-          if [ ! -d ${{github.workspace}}]; then
+          if [ ! -d ${{github.workspace}} ]; then
             echo "你这服务器怎么连项目目录都没有，我给你造一个"
             mkdir -p /home/runner/work/ArcaeaChannel-Fandom-Event-Site/ArcaeaChannel-Fandom-Event-Site
 
