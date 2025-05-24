@@ -12,7 +12,7 @@ jobs:
 
       - name: 检查并打包源目录
         run: |
-          SOURCE_DIR="${{github.workspace}}/source"  # 替换为实际目录
+          SOURCE_DIR="${{github.workspace}}"  # 替换为实际目录
           if [ ! -d "$SOURCE_DIR" ] || [ -z "$(ls -A $SOURCE_DIR)" ]; then
             echo "源目录不存在或为空: $SOURCE_DIR"
             exit 1
