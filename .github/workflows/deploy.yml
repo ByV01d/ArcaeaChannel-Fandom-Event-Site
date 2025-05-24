@@ -10,51 +10,25 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: 目录调试
+      - name: 检查并打包源目录
         run: |
-          echo "工作区:${{github.workspace}}"
-          ls -la ${{github.workspace}}
-
-      - name: 目录结构调试
-        run: |
-          echo "列出所有文件:"
-          find ${{github.workspace}}
-          if [ ! -d ${{github.workspace}} ]; then
-            echo "你这服务器怎么连项目目录都没有，我给你造一个"
-            mkdir -p /home/runner/work/ArcaeaChannel-Fandom-Event-Site/ArcaeaChannel-Fandom-Event-Site
-
-            if [ ! -d /home/runner/work/ArcaeaChannel-Fandom-Event-Site/ArcaeaChannel-Fandom-Event-Site ]; then
-              echo "项目目录创建失败，应该是你的权限不足"
-              exit 1
-            fi
-          fi
-
-      - name: 检查并创建 dist 目录（如有必要）
-        run: |
-          if [ -z "$(ls -A /path/to/files)" ]; then
-            echo "No files to archive. Check source directory."
+          SOURCE_DIR="${{github.workspace}}/source"  # 替换为实际目录
+          if [ ! -d "$SOURCE_DIR" ] || [ -z "$(ls -A $SOURCE_DIR)" ]; then
+            echo "源目录不存在或为空: $SOURCE_DIR"
             exit 1
           fi
-          tar -czf /tmp/archive.tar.gz /path/to/files
-          if [ ! -d "${{github.workspace}}/dist" ]; then
-            echo "dist 目录不存在，尝试创建空目录"
-            mkdir -p /home/runner/work/ArcaeaChannel-Fandom-Event-Site/ArcaeaChannel-Fandom-Event-Site/dist
-            if [ ! -d "/home/runner/work/ArcaeaChannel-Fandom-Event-Site/ArcaeaChannel-Fandom-Event-Site/dist" ]; then
-              echo "dist 目录创建失败，应该是你的权限不足"
-              exit 1
-            fi
-          fi
-          echo "dist 目录内容如下："
-          ls -la ${{github.workspace}}/dist
-          if [ ! ls -la ${{github.workspace}}/dist ]; then
-            ls -la /home/runner/work/ArcaeaChannel-Fandom-Event-Site/ArcaeaChannel-Fandom-Event-Site/dist
-            if [ ! ls -la /home/runner/work/ArcaeaChannel-Fandom-Event-Site/ArcaeaChannel-Fandom-Event-Site/dist ]
-              echo "不知是什么原因，总之你的权限不足"
-              exit 1
-            fi
+          tar -czf /tmp/archive.tar.gz -C "$SOURCE_DIR" .
+
+      - name: 确保 dist 目录存在
+        run: |
+          DIST_DIR="${{github.workspace}}/dist"
+          mkdir -p "$DIST_DIR"
+          if [ ! -d "$DIST_DIR" ]; then
+            echo "dist 目录创建失败: $DIST_DIR"
+            exit 1
           fi
 
-      - name: 通过 SCP 部署 dist 到阿里云
+      - name: 部署到阿里云
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_IP }}
@@ -62,8 +36,8 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "dist/*"
           target: "/var/www/lacrymira-site/"
-      
-      - name: 设置权限并重启 Nginx（CentOS）
+
+      - name: 设置权限并重启 Nginx
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SERVER_IP }}
