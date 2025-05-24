@@ -24,11 +24,11 @@ jobs:
           username: ${{ secrets.SERVER_USER }}  # 服务器用户名（如 root 或 ubuntu）
           key: ${{ secrets.SERVER_SSH_KEY }}    # 已配置的私钥
           script: |
-            cd /var/www/your-site
+            cd /var/www/lacrymira-site
             git pull origin main  # 若直接拉取仓库
             # 若需覆盖文件（如构建后的 dist/ 内容）：
-            rm -rf /var/www/your-site/*
-            cp -r $HOME/actions-runner/_work/your-repo/your-repo/dist/* /var/www/your-site/
+            rm -rf /var/www/lacrymira-site/*
+            cp -r $HOME/actions-runner/_work/your-repo/your-repo/dist/* /var/www/lacrymira-site/
             # 设置权限（根据 Web 服务器用户调整）
-            sudo chown -R www-data:www-data /var/www/your-site
+            sudo chown -R www-data:www-data /var/www/lacrymira-site
             sudo systemctl restart nginx
