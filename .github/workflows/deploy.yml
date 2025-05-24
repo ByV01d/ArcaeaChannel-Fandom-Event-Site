@@ -10,9 +10,15 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Debug directory
+        run: |
+          echo "Workspace:${{github.workspace}}"
+          ls -la ${{github.workspace}}
+
       # 可选：构建步骤（如使用 Hugo、Vite 等）
       - name: Build Static Site
         run: |
+          cd ${{github.workspace}}
           npm install
           npm run build
           # 构建后的文件默认在 dist/ 目录
