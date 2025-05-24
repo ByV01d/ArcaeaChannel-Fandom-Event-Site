@@ -29,13 +29,6 @@ jobs:
             fi
           fi
 
-
-      - name: 构建静态站点
-        run: |
-          cd ${{github.workspace}}
-          npm install
-          npm run build || { echo "构建失败喵"; exit 1}
-
       - name: 检查并创建 dist 目录（如有必要）
         run: |
           if [ ! -d "${{github.workspace}}/dist" ]; then
