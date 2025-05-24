@@ -15,6 +15,12 @@ jobs:
           echo "Workspace:${{github.workspace}}"
           ls -la ${{github.workspace}}
 
+      # 尝试搜寻对应根目录
+      - name: Debug directory structure
+        run: |
+          echo "Listing all files:"
+          find ${{github.workspace}}
+
       # 可选：构建步骤（如使用 Hugo、Vite 等）
       - name: Build Static Site
         run: |
