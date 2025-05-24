@@ -24,23 +24,35 @@ jobs:
             mkdir -p /home/runner/work/ArcaeaChannel-Fandom-Event-Site/ArcaeaChannel-Fandom-Event-Site
 
             if [ ! -d /home/runner/work/ArcaeaChannel-Fandom-Event-Site/ArcaeaChannel-Fandom-Event-Site ]; then
-              echo "创建不了啊，我尽力了"
+              echo "项目目录创建失败，应该是你的权限不足"
               exit 1
             fi
           fi
 
       - name: 检查并创建 dist 目录（如有必要）
         run: |
+          if [ -z "$(ls -A /path/to/files)" ]; then
+            echo "No files to archive. Check source directory."
+            exit 1
+          fi
+          tar -czf /tmp/archive.tar.gz /path/to/files
           if [ ! -d "${{github.workspace}}/dist" ]; then
             echo "dist 目录不存在，尝试创建空目录"
-            mkdir -p ${{github.workspace}}/dist
-            if [ ! -d "${{github.workspace}}/dist" ]; then
-              echo "dist 目录创建失败"
+            mkdir -p /home/runner/work/ArcaeaChannel-Fandom-Event-Site/ArcaeaChannel-Fandom-Event-Site/dist
+            if [ ! -d "/home/runner/work/ArcaeaChannel-Fandom-Event-Site/ArcaeaChannel-Fandom-Event-Site/dist" ]; then
+              echo "dist 目录创建失败，应该是你的权限不足"
               exit 1
             fi
           fi
           echo "dist 目录内容如下："
           ls -la ${{github.workspace}}/dist
+          if [ ! ls -la ${{github.workspace}}/dist ]; then
+            ls -la /home/runner/work/ArcaeaChannel-Fandom-Event-Site/ArcaeaChannel-Fandom-Event-Site/dist
+            if [ ! ls -la /home/runner/work/ArcaeaChannel-Fandom-Event-Site/ArcaeaChannel-Fandom-Event-Site/dist ]
+              echo "不知是什么原因，总之你的权限不足"
+              exit 1
+            fi
+          fi
 
       - name: 通过 SCP 部署 dist 到阿里云
         uses: appleboy/scp-action@v0.1.7
