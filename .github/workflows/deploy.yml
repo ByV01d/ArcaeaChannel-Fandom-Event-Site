@@ -1,4 +1,4 @@
-name: Deploy to Aliyun
+name: 部署到阿里云
 on:
   push:
     branches: [main]  # 监听 main 分支的推送
@@ -7,29 +7,35 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: Debug directory
+      - name: 目录调试
         run: |
-          echo "Workspace:${{github.workspace}}"
+          echo "工作区:${{github.workspace}}"
           ls -la ${{github.workspace}}
 
-      # 尝试搜寻对应根目录
-      - name: Debug directory structure
+      - name: 目录结构调试
         run: |
-          echo "Listing all files:"
+          echo "列出所有文件:"
           find ${{github.workspace}}
 
-      # 可选：构建步骤（如使用 Hugo、Vite 等）
-      - name: Build Static Site
+      - name: 构建静态站点
         run: |
           cd ${{github.workspace}}
           npm install
           npm run build
-          # 构建后的文件默认在 dist/ 目录
 
-      - name: Deploy dist to Aliyun via SCP
+      - name: 检查并创建 dist 目录（如有必要）
+        run: |
+          if [ ! -d "${{github.workspace}}/dist" ]; then
+            echo "dist 目录不存在，创建空目录"
+            mkdir -p ${{github.workspace}}/dist
+          fi
+          echo "dist 目录内容如下："
+          ls -la ${{github.workspace}}/dist
+
+      - name: 通过 SCP 部署 dist 到阿里云
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_IP }}
@@ -38,12 +44,12 @@ jobs:
           source: "dist/*"
           target: "/var/www/lacrymira-site/"
       
-      - name: Set Permissions and Restart Nginx
+      - name: 设置权限并重启 Nginx（CentOS）
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            sudo chown -R www-data:www-data /var/www/lacrymira-site
+            sudo chown -R nginx:nginx /var/www/lacrymira-site
             sudo systemctl restart nginx
