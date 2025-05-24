@@ -52,7 +52,7 @@
                 text-align: center;
                 user-select: none;
                 -webkit-user-select: none; 
-                -moz-user-select: none; 
+                -moz-user-select: none;
             }
 
 
@@ -127,7 +127,7 @@
             </div>
             <div class="kanae-story-connection">
                 <canvas class="story-connection" id="c4" width="5" height="100"></canvas>
-                <img src="img_for_html/story-anomaly.png" class="story-anomaly"></img>
+                <img src="img_for_html/story-anomaly.png" class="story-anomaly" onclick="alert('活动暂未开启。\n请先阅读完上一个剧情。')"></img>
             </div>
             <div class="kanae-story" id="story_f4">
                 <img src="img_for_html/cell_kanaeFanmadeStory.png" alt="章节4按钮"></img>
@@ -159,7 +159,133 @@
             let isDragging = false;
             let startY = 0;
             let currentY = 0;
+            let activeContainer = null;
+            let restoreClickListener = null; // 统一提升作用域
 
+            // 重置所有容器样式
+            function resetAllContainers(exceptId) {
+                document.querySelectorAll('.kanae-story:not([alt="头像"])').forEach(container => {
+                    if (container.id !== exceptId) {
+                        updateContainerState(container, false);
+                        container.style.pointerEvents = '';
+                        container.style.opacity = '';
+                    }
+                });
+            }
+
+            // 统一处理容器状态
+            function updateContainerState(container, isActive) {
+                const img = container.querySelector('img');
+                const span = container.querySelector('.kanae-story-span');
+                const shadow = container.querySelector('.kanae-story-spanshadow');
+                
+                if (isActive) {
+                    img.src = 'img_for_html/cell_kanaeFanmadeStory_pressed.png';
+                    if (span) span.style.color = '#c0c0c0';
+                    if (shadow) shadow.style.color = '#000000b2';
+                    
+                    // 禁用其他容器
+                    document.querySelectorAll('.kanae-story:not([alt="头像"])').forEach(other => {
+                        if (other !== container) {
+                            other.style.pointerEvents = 'none';
+                            other.style.opacity = '0.5';
+                        }
+                    });
+                } else {
+                    img.src = 'img_for_html/cell_kanaeFanmadeStory.png';
+                    if (span) span.style.color = '';
+                    if (shadow) shadow.style.color = '';
+                }
+            }
+
+            // 创建外部点击处理函数
+            function createExternalClickHandler(container) {
+                return (e) => {
+                    if (!container.contains(e.target)) {
+                        updateContainerState(container, false);
+                        resetAllContainers();
+                        activeContainer = null;
+                        
+                        // 移除事件监听器
+                        document.removeEventListener('click', restoreClickListener, true);
+                        // 新增：向父窗口发送隐藏teller请求
+                        window.parent.postMessage({
+                            type: 'hideTeller'
+                        }, '*');
+                    }
+                };
+            }
+
+            // 为每个容器添加点击事件
+            document.querySelectorAll('.kanae-story:not([alt="头像"])').forEach(container => {
+                container.addEventListener('click', function(e) {
+                    // 防止拖动时触发点击
+                    if (isDragging) return;
+
+                    // 仅当点击的是story_f1或当前激活容器时继续
+                    if (this.id !== 'story_f1' && activeContainer !== this) {
+                        return;
+                    }
+
+                    // 如果是再次点击激活容器
+                    if (activeContainer === this) {
+                        updateContainerState(this, false);
+                        resetAllContainers();
+                        activeContainer = null;
+                        return;
+                    }
+
+                    // 首次激活容器时
+                    resetAllContainers(this.id);
+                    updateContainerState(this, true);
+                    activeContainer = this;
+                    
+                    // 移除旧的外部点击监听器
+                    if (restoreClickListener) {
+                        document.removeEventListener('click', restoreClickListener, true);
+                    }
+                    
+                    // 创建并添加新监听器
+                    restoreClickListener = createExternalClickHandler(this);
+                    requestAnimationFrame(() => {
+                        document.addEventListener('click', restoreClickListener, true);
+                    });
+
+                    // 仅当点击story_f1时发送显示teller请求
+                    if (this.id === 'story_f1') {
+                        // 新增：向父窗口发送显示teller请求
+                        window.parent.postMessage({
+                            type: 'showTeller',
+                            containerId: this.id,
+                            pressed: true
+                        }, '*');
+                    }
+                });
+            });
+
+            // 新增：监听来自父窗口的重置消息
+            window.addEventListener('message', function(e) {
+                // 添加来源验证（根据实际情况修改域名）
+                if (e.origin !== 'https://your-parent-domain.com') return;
+                
+                if (e.data.type === 'resetStoryContainers') {
+                    // 恢复所有容器状态
+                    document.querySelectorAll('.kanae-story:not([alt="头像"])').forEach(container => {
+                        updateContainerState(container, false);
+                        container.style.pointerEvents = '';
+                        container.style.opacity = '';
+                    });
+
+                    // 重置全局状态
+                    activeContainer = null;
+                    if (restoreClickListener) {
+                        document.removeEventListener('click', restoreClickListener, true);
+                        restoreClickListener = null;
+                    }
+                }
+            });
+
+            // 拖动相关代码（移除重复的mousedown绑定）
             appMobileOnly.addEventListener('mousedown', (e) => {
                 isDragging = true;
                 startY = e.clientY;

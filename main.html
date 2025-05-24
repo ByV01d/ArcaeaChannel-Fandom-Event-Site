@@ -8,11 +8,12 @@
         <link rel="stylesheet" href="css/footer.css"></link>
         <link rel="stylesheet" href="css/context_switch.css"></link>
         <link rel="stylesheet" href="css/rules.css"></link>
+        <link rel="story" href="css/story_teller.css"></link>"
         <script src="java/insight_respoinsive.js"></script>
         <script src="java/menu.js"></script>
         <script src="java/content_switch.js"></script>
     </head>
-    <body>        
+    <body>
         <header>
             <div class="header-container c-regular" id="header-container">
                 <div class="left-header">
@@ -35,7 +36,7 @@
                     <div class="menu-container">
                         <div class="menu-content">
                             <!-- 菜单内容将在此动态加载或静态编写 -->
-                            <div class="menu-zhanwei-question" onclick="alert('故事仍未开始……')"></div>
+                            <div class="menu-zhanwei-question"></div>
                             <div class="menu-selection" onclick="switchContent('main')">
                                 <p>主页</p>
                             </div>
@@ -65,6 +66,11 @@
             </header>
         </header>
     <div class="all">
+        <div class="top-story-teller" id="top-story-teller">
+            <div class="story-text-container">
+                <p class="story-text story-text--default" aria-live="polite" id="storyText"></p>
+            </div>
+        </div>
         <div id="main" class="content-switch main">
              <div class="hero-image" style="display: flex; align-items: stretch">
                 <div class="zhanwei-heroImage"></div>

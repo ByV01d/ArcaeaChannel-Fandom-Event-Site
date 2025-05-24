@@ -22,9 +22,6 @@ function switchContent(type) {
   
   // 显示目标卡片
   const target = document.getElementById(`${type}`);
-  if (target == "image"){
-    target = "main"
-  }
   const bg = document.getElementById('header-container');
   if (target) {
     target.classList.add('active');
