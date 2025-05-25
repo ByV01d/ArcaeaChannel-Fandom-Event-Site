@@ -180,19 +180,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                     
                                     // 向story.html发送重置消息
                                     const iframe = document.querySelector('iframe');
-                                    if (iframe && iframe.contentWindow) {
-                                        iframe.contentWindow.postMessage({
-                                            type: 'resetStoryContainers'
-                                        }, '*');
-                                    }
-                                }, 500);
-                                
-                                // 向story.html发送重置消息
-                                const iframe = document.querySelector('iframe');
-                                if (iframe && iframe.contentWindow) {
-                                    iframe.contentWindow.postMessage({
-                                        type: 'resetStoryContainers'
-                                    }, '*');
+            if (iframe && iframe.contentWindow && iframe.contentWindow.resetContainers) {
+                iframe.contentWindow.resetContainers();
                                 }
                             }, 500);
                         }
