@@ -51,10 +51,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // 修复：使用正确的ID选择器
         storyTextElement = document.getElementById('storyText');
         tellerElement = document.getElementById('top-story-teller');
-        
+    
         if (storyTextElement || retryCount >= maxRetries) {
             clearInterval(tryGetElements);
-            
+    
             if (!storyTextElement) {
                 console.error('[致命] storyText 元素始终未找到，请检查：');
                 console.error('1. main.html第72行是否存在id="storyText"元素');
@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             
                             // 移除active类
                             tellerElement.classList.remove('active');
-                            
+        
                             // 延迟重置状态
                             setTimeout(() => {
                                 currentParagraphIndex = 0;
@@ -178,10 +178,21 @@ document.addEventListener('DOMContentLoaded', () => {
                                         storyTextElement.textContent = '';
                                     }
                                     
-                                    // 向story.html发送重置消息
-                                    const iframe = document.querySelector('iframe');
-            if (iframe && iframe.contentWindow && iframe.contentWindow.resetContainers) {
-                iframe.contentWindow.resetContainers();
+            // 向story.html发送重置消息
+            const iframe = document.querySelector('iframe');
+            if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.postMessage({
+                    type: 'resetStoryContainers'
+                }, '*');
+            }
+                                }, 500);
+                                
+                                // 向story.html发送重置消息
+                                const iframe = document.querySelector('iframe');
+                                if (iframe && iframe.contentWindow) {
+                                    iframe.contentWindow.postMessage({
+                                        type: 'resetStoryContainers'
+                                    }, '*');
                                 }
                             }, 500);
                         }
@@ -229,10 +240,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                     storyTextElement.textContent = '';
                                     if (storyTextElement.classList) {
                                         storyTextElement.classList.remove('last-paragraph');
-                                    }
+    }
                                 }
                                 currentParagraphIndex = 0;
-                                
+
                                 // 添加兼容性前缀
                                 if (tellerElement) {
                                     tellerElement.style.display = 'block';
@@ -297,13 +308,13 @@ document.addEventListener('DOMContentLoaded', () => {
                                 storyTextElement.textContent = '';
                             }
                             
-                            // 向story.html发送重置消息
-                            const iframe = document.querySelector('iframe');
-                            if (iframe && iframe.contentWindow) {
-                                iframe.contentWindow.postMessage({
-                                    type: 'resetStoryContainers'
-                                }, '*');
-                            }
+            // 向story.html发送重置消息
+            const iframe = document.querySelector('iframe');
+            if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.postMessage({
+                    type: 'resetStoryContainers'
+                }, '*');
+            }
                         }, 500);
                     }
                 }
@@ -312,4 +323,16 @@ document.addEventListener('DOMContentLoaded', () => {
         
         retryCount++;
     }, 500);
+});
+
+// 监听来自story.html的消息
+window.addEventListener('message', function(e) {
+    if (e.data === 'restoreStyles') {
+        restoreStoryStyles();
+    }
+});
+
+// 添加DOM直接操作代码
+document.getElementById('story-content').addEventListener('click', function() {
+    restoreStoryStyles();
 });

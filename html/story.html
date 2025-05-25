@@ -156,6 +156,59 @@
         </div>
         <script>
             // window.parent.postMessage('storyLoaded', '*');
+            function createConnection(num){
+                const ConnectionNum = document.getElementById(`c${num}`);
+                const sx = ConnectionNum.getContext('2d');
+                sx.beginPath();
+                sx.moveTo(2.5, 0);
+                sx.lineTo(2.5, 100);
+                sx.lineWidth = 5;
+                sx.strokeStyle = "#ffffff";
+                sx.stroke();
+            }
+            function createConnectionAlt(num){
+                const ConnectionNum = document.getElementById(`c${num}`);
+                const sxa = ConnectionNum.getContext('2d');
+                sxa.beginPath();
+                sxa.moveTo(2.5, 0);
+                sxa.lineTo(2.5, 20);
+                sxa.moveTo(2.5, 80);
+                sxa.lineTo(2.5, 100);
+                sxa.lineWidth = 5;
+                sxa.strokeStyle = "#ffffff";
+                sxa.stroke();
+            }
+
+            /*
+            function createConnectionAlt(num){
+                const ConnectionNum = document.getElementById(`c${num}`);
+                const sxa = ConnectionNum.getContext('2d');
+                const pitch = document.getElementById('pitch');
+                sxa.beginPath();
+                sxa.moveTo(25, 0);
+                sxa.lineTo(25, 100);
+                sxa.lineWidth = 5;
+                sxa.strokeStyle = "#ffffff";
+                sxa.stroke();
+                sxa.moveTo(20, 60);
+                sxa.drawImage(pitch, 20, 60, 30, 40);
+            }
+            */
+
+            for (var num=1; num<=6 ; num++)
+            {
+                if (num == 4){
+                    createConnectionAlt(num);
+                } else {
+                    createConnection(num);
+                }
+            }
         </script>
+
+        <!-- 添加DOM操作样式恢复 -->
+        <style id="story-styles">
+            /* 恢复样式定义 */
+            .story-text { color: #333; }
+        </style>
     </body>
 </html>
