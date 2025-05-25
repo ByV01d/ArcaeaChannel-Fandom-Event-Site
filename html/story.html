@@ -205,10 +205,115 @@
             }
         </script>
 
+        <!-- 添加逐字显示样式 -->
         <!-- 添加DOM操作样式恢复 -->
         <style id="story-styles">
             /* 恢复样式定义 */
-            .story-text { color: #333; }
+            .story-text {
+                color: #333;
+                opacity: 0;
+                transition: opacity 0.5s;
+            }
+    
+            .fade-in {
+                animation: fadeIn 0.5s ease-in forwards;
+            }
+    
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
         </style>
+
+        <!-- 新增kanae-story交互逻辑 -->
+        <script>
+            // 保存原始样式
+            const kanaeContainers = document.querySelectorAll('.kanae-story');
+            const originalStyles = {};
+
+            // 初始化样式存储
+            kanaeContainers.forEach(container => {
+                originalStyles[container.id] = {
+                    imgSrc: container.querySelector('img')?.src,
+                    spanColor: container.querySelector('.kanae-story-span')?.style.color
+                };
+            });
+
+            // 激活指定容器
+            function activateContainer(targetContainer) {
+                // 禁用其他容器
+                kanaeContainers.forEach(container => {
+                    if (container === targetContainer) {
+                        // 切换当前容器样式
+                        const img = container.querySelector('img');
+                        if (img) {
+                            img.src = 'img_for_html/cell_kanaeFanmadeStory_pressed.png';
+                        }
+                        
+                        const span = container.querySelector('.kanae-story-span');
+                        if (span) {
+                            span.style.color = '#808080';
+                        }
+                        
+                        // 移除点击事件阻止
+                        container.style.pointerEvents = 'auto';
+                    } else {
+                        // 禁用其他容器
+                        container.style.pointerEvents = 'none';
+                    }
+                });
+            }
+
+            // 恢复所有容器
+            function restoreContainers() {
+                kanaeContainers.forEach(container => {
+                    const img = container.querySelector('img');
+                    if (img && originalStyles[container.id]?.imgSrc) {
+                        img.src = originalStyles[container.id].imgSrc;
+                    }
+                    
+                    const span = container.querySelector('.kanae-story-span');
+                    if (span && originalStyles[container.id]?.spanColor) {
+                        span.style.color = originalStyles[container.id].spanColor;
+                    }
+                    
+                    // 恢复点击事件
+                    container.style.pointerEvents = 'auto';
+                });
+            }
+
+            // 绑定点击事件
+            kanaeContainers.forEach(container => {
+                container.addEventListener('click', (e) => {
+                    // 跳过头像容器
+                    if (container.classList.contains('avatar')) return;
+                    
+                    // 激活当前容器
+                    activateContainer(container);
+                    
+                    // 监听top-story-teller状态
+                    const storyContainer = document.getElementById('top-story-teller');
+                    if (storyContainer) {
+                        // 创建MutationObserver监听样式变化
+                        const observer = new MutationObserver((mutations) => {
+                            mutations.forEach(mutation => {
+                                if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                                    // 如果容器被隐藏，恢复样式
+                                    if (storyContainer.style.display === 'none') {
+                                        restoreContainers();
+                                        observer.disconnect();
+                                    }
+                                }
+                            });
+                        });
+                        
+                        observer.observe(storyContainer, {
+                            attributes: true,
+                            attributeFilter: ['style']
+                        });
+                    }
+                });
+            });
+        </script>
     </body>
 </html>
