@@ -49,6 +49,7 @@ function bindStoryF1ClickListener() {
     if (storyF1) {
         // 使用事件委托避免重复绑定
         storyF1.addEventListener('click', async (e) => {
+            console.log('story-f1 clicked');  // 添加调试日志
             // 防止事件冒泡
             e.stopPropagation();
             
@@ -57,19 +58,23 @@ function bindStoryF1ClickListener() {
             
             try {
                 const response = await fetch('html/story/k.txt');
+                console.log('Response status:', response.status);  // 添加调试日志
                 // 显式检查响应状态
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 
                 const text = await response.text();
+                console.log('Text length:', text.length);  // 添加调试日志
                 paragraphs = parseTextToArray(text);
+                console.log('Parsed paragraphs:', paragraphs);  // 添加调试日志
                 
                 // 初始化故事显示
                 const storyContainer = document.getElementById('top-story-teller');
                 if (storyContainer && paragraphs.length > 0) {
                     currentParagraphIndex = 0;
                     isProcessing = false;
+                    console.log('Starting paragraph transition');  // 添加调试日志
                     await handleParagraphTransition(storyContainer, paragraphs);
                 }
             } catch (error) {
@@ -193,6 +198,7 @@ function restoreStoryStyles() {
 
 // 增强版逐字显示函数
 function showParagraphWithProgress(container, text, delay = 0) {
+    console.log('Showing paragraph:', text);  // 添加调试日志
     return new Promise((resolve) => {
         const effectiveDelay = Math.max(delay, 100);
         
